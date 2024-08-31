@@ -1,0 +1,12 @@
+class Test {
+/* teste analisador léxico */
+    main(string[] args) {
+        int x = 10; // Declaração de variável
+        int y = x + 5; // Expressão aritmética
+        if (y > 15) {
+            System.out.println("y é maior que 15");
+        } else {
+            System.out.println("y é menor ou igual a 15");
+        }
+    }
+}
