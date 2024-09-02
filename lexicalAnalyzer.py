@@ -1,4 +1,6 @@
-
+#Lista de erros: Delimitadores que abrem sem fechar: (){}[], abertura sem fechamento de comentários: /**/
+# Abertura sem fechamento de aspas simples e aspas duplas, inserção de simbolos não aceitos: ♫ » etc. (altcode),
+# Inserção de caracteres com acento: â ü etc (Consideraremos isso erro?).
 from finiteAutomaton import LexicalFiniteAutomaton
 
 def lexical_analise():
