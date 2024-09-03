@@ -34,6 +34,9 @@ class TokenCategory:
             "OPEN_SQUARE_BRACKET": "DELIMITER",
             "CLOSE_SQUARE_BRACKET": "DELIMITER",
             "BLOCK_COMMENT": "COMMENTS",
-            "LINE_COMMENT": "COMMENTS"
+            "LINE_COMMENT": "COMMENTS",
+            "NUMBER_ERROR": "ERROR",
+            "STRING_ERROR": "ERROR",
+            "CHARACTER_INVALID": "ERROR"
         }
         return category_type.get(token_type)
