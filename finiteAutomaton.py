@@ -28,16 +28,15 @@ class LexicalFiniteAutomaton:
                 elif (character == "'"):
                     self.lexeme += character
                     self.state = 7
-                
                 elif (character == "+"):
                     self.lexeme += character
-                    # direcionar para estado ou salva direto
+                    self.state = 9
                 elif (character == "-"):
                     self.lexeme += character
                     # direcionar para estado ou salva direto
                 elif (character == "*"):
                     self.lexeme += character
-                    # direcionar para estado ou salva direto
+                    self.save_token_and_restart(character, line_number, TokenType.ARITHMETIC_MULTIPLICATION)
                 elif (character == "/"):
                     self.lexeme += character
                         # direcionar para estado ou salva direto
@@ -134,6 +133,8 @@ class LexicalFiniteAutomaton:
                     self.lexeme += character
                     self.register_error_and_restart(character, line_number,TokenType.STRING_ERROR)
                     #É ERRO. OS CARACTERES DA STRING TEM QUE ESTAR DENTRO DOS SIMBOLOS PERMITIDOS
+                elif (character == "\n"):
+                    self.register_error_and_restart(character, line_number,TokenType.STRING_ERROR)
                 else:
                     self.lexeme += character
             #REVER A QUESTÃO DE QUANDO É ERRO
@@ -152,20 +153,22 @@ class LexicalFiniteAutomaton:
                 else:
                     self.register_error_and_restart(character, line_number,TokenType.CHARACTER_INVALID)
                     self.find_lexeme(character, line_number)
-
-
-
+            case 9:
+                if character == "+":
+                    self.lexeme += character
+                    self.save_token_and_restart(character, line_number, TokenType.INCREMENT)
+                else:
+                    self.save_token_and_restart(character, line_number, TokenType.ARITHMETIC_ADDITION)
+                    self.find_lexeme(character, line_number)
 
     def save_token_and_restart(self, character, line_number, token_type):
         if token_type != TokenType.LINE_COMMENT and token_type != TokenType.BLOCK_COMMENT:
             self.token_valid_list.append(Token.get_token(self.lexeme, token_type, line_number))
-        self.restart(character, line_number)
+        self.lexeme = ''
+        self.state = 0
 
     def register_error_and_restart(self, character, line_number, token_type):
         self.error_list.append(Token.get_token(self.lexeme, token_type, line_number))
-        self.restart(character, line_number)
-
-    def restart(self, character, line_number):
         self.lexeme = ''
         self.state = 0
 
