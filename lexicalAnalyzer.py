@@ -14,6 +14,10 @@ def lexical_analise():
 	for item in finiteAutomaton.show_token_list():
 		print(item)
 
+	print("----------- erro")
+	for item in finiteAutomaton.show_error_list():
+		print(item)
+
 def open_file(file_name):
 	try:
 		file = open(file_name, "r")
