@@ -33,58 +33,58 @@ class LexicalFiniteAutomaton:
                     self.state = 9
                 elif (character == "-"):
                     self.lexeme += character
-                    # direcionar para estado ou salva direto
+                    self.state = 10
                 elif (character == "*"):
                     self.lexeme += character
                     self.save_token_and_restart(character, line_number, TokenType.ARITHMETIC_MULTIPLICATION)
                 elif (character == "/"):
                     self.lexeme += character
-                        # direcionar para estado ou salva direto
+                    self.state = 11
                 elif (character == "="):
                     self.lexeme += character
-                        # direcionar para estado ou salva direto
+                    self.state = 12
                 elif (character == "!"):
                     self.lexeme += character
-                        # direcionar para estado ou salva direto
+                    self.state = 12
                 elif (character == ">"):
                     self.lexeme += character
-                        # direcionar para estado ou salva direto
+                    self.state = 12
                 elif character == "<":
                     self.lexeme += character
-                        # direcionar para estado
+                    self.state = 12
                 elif character == "&":
                     self.lexeme += character
-                        # direcionar para estado
+                    self.state = 13
                 elif character == "|":
                     self.lexeme += character
-                        # direcionar para estado
+                    self.state = 14
                 elif character == ".":
                     self.lexeme += character
-                        # direcionar para estado
+                    self.save_token_and_restart(character, line_number, TokenType.DOT_OPERATOR)
                 elif character == ";":
                     self.lexeme += character
-                        # direcionar para estado
+                    self.save_token_and_restart(character, line_number, TokenType.SEMICOLON)
                 elif character == ",":
                     self.lexeme += character
-                        # direcionar para estado
+                    self.save_token_and_restart(character, line_number, TokenType.COMMA)
                 elif character == "(":
                     self.lexeme += character
-                        # direcionar para estado
+                    self.save_token_and_restart(character, line_number, TokenType.OPEN_PARENTHESIS)
                 elif character == ")":
                     self.lexeme += character
-                        # direcionar para estado
+                    self.save_token_and_restart(character, line_number, TokenType.CLOSE_PARENTHESIS)
                 elif character == "{":
                     self.lexeme += character
-                        # direcionar para estado
+                    self.save_token_and_restart(character, line_number, TokenType.OPEN_CURLY_BRACE)
                 elif character == "}":
                     self.lexeme += character
-                        # direcionar para estado
+                    self.save_token_and_restart(character, line_number, TokenType.CLOSE_CURLY_BRACE)
                 elif character == "[":
                     self.lexeme += character
-                        # direcionar para estado
+                    self.save_token_and_restart(character, line_number, TokenType.OPEN_SQUARE_BRACKET)
                 elif character == "]":
                     self.lexeme += character
-            
+                    self.save_token_and_restart(character, line_number, TokenType.CLOSE_SQUARE_BRACKET)
             case 1:
                 if (re.match(r'[a-zA-Z0-9]',character)) or (re.match(r'_',character)):
                     self.lexeme += character
@@ -160,6 +160,43 @@ class LexicalFiniteAutomaton:
                 else:
                     self.save_token_and_restart(character, line_number, TokenType.ARITHMETIC_ADDITION)
                     self.find_lexeme(character, line_number)
+            case 10:
+                if re.match(r'[0-9]', character) :
+                    self.lexeme += character
+                    self.state = 2
+                elif re.match(r'-', character):
+                    self.lexeme += character
+                    self.save_token_and_restart(character, line_number, TokenType.DECREMENT)
+                else:
+                    self.save_token_and_restart(character, line_number, TokenType.ARITHMETIC_SUBTRACTION)
+            case 11:
+                if re.match(r'*', character) :
+                    self.lexeme += character
+                    self.save_token_and_restart(character, line_number, TokenType.BLOCK_COMMENT)
+                elif re.match(r'/', character):
+                    self.lexeme += character
+                    self.save_token_and_restart(character, line_number, TokenType.LINE_COMMENT)
+                else:
+                    self.save_token_and_restart(character, line_number, TokenType.ARITHMETIC_DIVIDER)
+            case 12: #fiz um método genérico para todos que usam o = como segundo operador, mas as identificações são diferentes
+                if re.match(r'=', character) :
+                    self.lexeme += character
+                    self.save_token_and_restart(character, line_number, TokenType.ASSIGNMENT)
+                else:
+                    self.save_token_and_restart(character, line_number, TokenType.EQUAL)
+            case 13: 
+                if re.match(r'&', character) :
+                    self.lexeme += character
+                    self.save_token_and_restart(character, line_number, TokenType.AND)
+                else:
+                    self.register_error_and_restart(character, line_number,TokenType.CHARACTER_INVALID)
+            case 14: 
+                if re.match(r'|', character) :
+                    self.lexeme += character
+                    self.save_token_and_restart(character, line_number, TokenType.OR)
+                else:
+                    self.register_error_and_restart(character, line_number,TokenType.CHARACTER_INVALID)
+
 
     def save_token_and_restart(self, character, line_number, token_type):
         if token_type != TokenType.LINE_COMMENT and token_type != TokenType.BLOCK_COMMENT:
