@@ -39,7 +39,7 @@ class LexicalFiniteAutomaton:
                     self.save_token_and_restart(character, line_number, TokenType.ARITHMETIC_MULTIPLICATION)
                 elif (character == "/"):
                     self.lexeme += character
-                    self.state = 11
+                    #self.state = 11        #esse ainda não funciona, não consegui entender onde ta bugado
                 elif (character == "="):
                     self.lexeme += character
                     self.state = 12
@@ -169,6 +169,7 @@ class LexicalFiniteAutomaton:
                     self.save_token_and_restart(character, line_number, TokenType.DECREMENT)
                 else:
                     self.save_token_and_restart(character, line_number, TokenType.ARITHMETIC_SUBTRACTION)
+                    self.find_lexeme(character, line_number)
             case 11:
                 if re.match(r'*', character) :
                     self.lexeme += character
@@ -178,24 +179,29 @@ class LexicalFiniteAutomaton:
                     self.save_token_and_restart(character, line_number, TokenType.LINE_COMMENT)
                 else:
                     self.save_token_and_restart(character, line_number, TokenType.ARITHMETIC_DIVIDER)
+                    self.find_lexeme(character, line_number)
             case 12: #fiz um método genérico para todos que usam o = como segundo operador, mas as identificações são diferentes
                 if re.match(r'=', character) :
                     self.lexeme += character
                     self.save_token_and_restart(character, line_number, TokenType.ASSIGNMENT)
                 else:
                     self.save_token_and_restart(character, line_number, TokenType.EQUAL)
+                    self.find_lexeme(character, line_number)
             case 13: 
                 if re.match(r'&', character) :
                     self.lexeme += character
                     self.save_token_and_restart(character, line_number, TokenType.AND)
                 else:
                     self.register_error_and_restart(character, line_number,TokenType.CHARACTER_INVALID)
+                    self.find_lexeme(character, line_number)
             case 14: 
                 if re.match(r'|', character) :
                     self.lexeme += character
                     self.save_token_and_restart(character, line_number, TokenType.OR)
                 else:
                     self.register_error_and_restart(character, line_number,TokenType.CHARACTER_INVALID)
+                    self.find_lexeme(character, line_number)
+            
 
 
     def save_token_and_restart(self, character, line_number, token_type):
