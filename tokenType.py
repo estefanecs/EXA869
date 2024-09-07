@@ -34,7 +34,9 @@ class TokenType(Enum):
     LINE_COMMENT = 30,
     NUMBER_ERROR = 31,
     STRING_ERROR = 32,  
-    CHARACTER_INVALID = 33
+    CHARACTER_INVALID = 33,
+    MISSING_QUOTES = 34,
+    OVERFLOW = 35
   
 
 

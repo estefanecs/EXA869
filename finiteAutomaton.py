@@ -11,7 +11,6 @@ class LexicalFiniteAutomaton:
         self.lexeme = ''
         self.state = 0
 
-#ver pagina 46(do livro msm) a questão da implementação da tabela de simbolos
     def find_lexeme(self, character, line_number):
         match self.state:
             case 0:
@@ -29,34 +28,34 @@ class LexicalFiniteAutomaton:
                     self.state = 7
                 elif (character == "+"):
                     self.lexeme += character
-                    self.state = 9
+                    self.state = 10
                 elif (character == "-"):
                     self.lexeme += character
-                    self.state = 10
+                    self.state = 11
                 elif (character == "*"):
                     self.lexeme += character
                     self.save_token_and_restart(line_number, TokenType.ARITHMETIC_MULTIPLICATION)
                 elif (character == "/"):
                     self.lexeme += character
-                    self.state = 11 
+                    self.state = 12
                 elif (character == "="):
                     self.lexeme += character
-                    self.state = 14
+                    self.state = 15
                 elif (character == "!"):
                     self.lexeme += character
-                    self.state = 15
+                    self.state = 16
                 elif (character == ">"):
                     self.lexeme += character
-                    self.state = 16
+                    self.state = 17
                 elif character == "<":
                     self.lexeme += character
-                    self.state = 17
+                    self.state = 18
                 elif character == "&":
                     self.lexeme += character
-                    self.state = 18
+                    self.state = 19
                 elif character == "|":
                     self.lexeme += character
-                    self.state = 19
+                    self.state = 20
                 elif character == ".":
                     self.lexeme += character
                     self.save_token_and_restart(line_number, TokenType.DOT_OPERATOR)
@@ -99,15 +98,18 @@ class LexicalFiniteAutomaton:
                 else:
                     self.save_token_and_restart(line_number, TokenType.NUMBER)
                     self.find_lexeme(character, line_number)
-            case 3:#REVER ESSE ERRO
+            case 3:
                 if (re.match(r'[0-9]', character)) :
                     self.lexeme += character
                     self.state = 4
                 else:
-                    self.lexeme += character
-                    self.register_error_and_restart(line_number,TokenType.NUMBER_ERROR)
-                    #registra erro, pq depois do ponto deve ter pelo menos 1 numero
-                    # volta para o estado 0
+                    self.lexeme = self.lexeme.replace(".","")
+                    self.save_token_and_restart(line_number, TokenType.NUMBER)
+
+                    self.lexeme = "."
+                    self.save_token_and_restart(line_number, TokenType.DOT_OPERATOR)
+
+                    self.find_lexeme(character, line_number)
             case 4: 
                 if (re.match(r'[0-9]', character)) :
                     self.lexeme += character
@@ -121,7 +123,7 @@ class LexicalFiniteAutomaton:
                 elif (32<=ord(character)<=126 and character != "'"):
                     self.lexeme += character
                 elif (character == "\n"):
-                    self.register_error_and_restart(line_number,TokenType.STRING_ERROR)
+                    self.register_error_and_restart(line_number,TokenType.MISSING_QUOTES)
                 else:
                     self.lexeme += character
                     self.state = 6
@@ -130,10 +132,9 @@ class LexicalFiniteAutomaton:
                     self.lexeme += character
                     self.register_error_and_restart(line_number,TokenType.STRING_ERROR)
                 elif (character == "\n"):
-                    self.register_error_and_restart(line_number,TokenType.STRING_ERROR)
+                    self.register_error_and_restart(line_number,TokenType.MISSING_QUOTES)
                 else:
                     self.lexeme += character
-            #REVER A QUESTÃO DE QUANDO É ERRO EM CHAR
             case 7:
                 if ((32<=ord(character)<=126) and character != '"' and character != "'"):
                     self.lexeme += character
@@ -145,17 +146,27 @@ class LexicalFiniteAutomaton:
                 if character == "'":
                     self.lexeme += character
                     self.save_token_and_restart(line_number, TokenType.CHARACTER)
+                elif (character == "\n"):
+                    self.register_error_and_restart(line_number,TokenType.MISSING_QUOTES)
                 else:
-                    self.register_error_and_restart(line_number,TokenType.CHARACTER_INVALID)
-                    self.find_lexeme(character, line_number)
+                    self.lexeme += character
+                    self.state = 9
             case 9:
+                if (character == "'"):
+                    self.lexeme += character
+                    self.register_error_and_restart(line_number, TokenType.OVERFLOW)
+                elif (character == "\n"):
+                    self.register_error_and_restart(line_number,TokenType.MISSING_QUOTES)
+                else:
+                    self.lexeme += character
+            case 10:
                 if character == "+":
                     self.lexeme += character
                     self.save_token_and_restart(line_number, TokenType.INCREMENT)
                 else:
                     self.save_token_and_restart(line_number, TokenType.ARITHMETIC_ADDITION)
                     self.find_lexeme(character, line_number)
-            case 10:
+            case 11:
                 if re.match(r'[0-9]', character) :
                     self.lexeme += character
                     self.state = 2
@@ -165,61 +176,62 @@ class LexicalFiniteAutomaton:
                 else:
                     self.save_token_and_restart(line_number, TokenType.ARITHMETIC_SUBTRACTION)
                     self.find_lexeme(character, line_number)
-            case 11:
+            case 12:
                 if character == "*": 
                     self.lexeme += character
-                    self.state = 12
+                    self.state = 13
                 elif character == "/": 
                     self.lexeme += character
-                    self.state = 13
+                    self.state = 14
                 else:
                     self.save_token_and_restart(line_number, TokenType.ARITHMETIC_DIVIDER)
                     self.find_lexeme(character, line_number)
-            case 12: #para comentario em bloco
+            case 13: #para comentario em bloco
+                self.lexeme += character
                 #Na verdade precisa acumular o comentario antes de salvar e analisar erro
                 self.save_token_and_restart(line_number, TokenType.BLOCK_COMMENT)
-            case 13: #comentario em linha
+            case 14:
                 if (character == "\n"):
                     self.save_token_and_restart(line_number, TokenType.LINE_COMMENT)
                 else:
-                    self.lexeme = character
-            case 14: 
-                if re.match(r'=', character) :
+                    self.lexeme += character
+            case 15: 
+                if character == "=":
                     self.lexeme += character
                     self.save_token_and_restart(line_number, TokenType.EQUAL)
                 else:
                     self.save_token_and_restart(line_number, TokenType.ASSIGNMENT)
                     self.find_lexeme(character, line_number)
-            case 15:
-                if re.match(r'=', character) :
+            case 16:
+                if character == "=":
                     self.lexeme += character
                     self.save_token_and_restart(line_number, TokenType.DIFFERENT)
                 else:
                     self.register_error_and_restart(line_number, TokenType.CHARACTER_INVALID)
                     self.find_lexeme(character, line_number)
-            case 16:
-                if re.match(r'=', character) :
+            case 17:
+                if character == "=":
                     self.lexeme += character
                     self.save_token_and_restart(line_number, TokenType.GREATER_EQUAL_THAN)
                 else:
                     self.save_token_and_restart(line_number, TokenType.GREATER_THAN)
                     self.find_lexeme(character, line_number)
-            case 17:
-                if re.match(r'=', character) :
+            case 18:
+                if character == "=":
                     self.lexeme += character
                     self.save_token_and_restart(line_number, TokenType.LESS_EQUAL_THAN)
                 else:
                     self.save_token_and_restart(line_number, TokenType.LESS_THAN)
                     self.find_lexeme(character, line_number)
-            case 18: 
-                if re.match(r'&', character) :
+            case 19: 
+                if character == "&":
                     self.lexeme += character
                     self.save_token_and_restart(line_number, TokenType.AND)
                 else:
                     self.register_error_and_restart(line_number,TokenType.CHARACTER_INVALID)
                     self.find_lexeme(character, line_number)
-            case 19: 
-                if re.match(r'|', character) :
+            case 20: 
+                if character == "|" :
                     self.lexeme += character
                     self.save_token_and_restart(line_number, TokenType.OR)
                 else:
@@ -228,7 +240,6 @@ class LexicalFiniteAutomaton:
                 
 
     def save_token_and_restart(self, line_number, token_type):
-       # if token_type != TokenType.LINE_COMMENT and token_type != TokenType.BLOCK_COMMENT:
         self.token_valid_list.append(Token.get_token(self.lexeme, token_type, line_number))
         self.lexeme = ''
         self.state = 0

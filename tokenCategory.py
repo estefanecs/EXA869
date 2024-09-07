@@ -37,6 +37,8 @@ class TokenCategory:
             "LINE_COMMENT": "COMMENTS",
             "NUMBER_ERROR": "ERROR",
             "STRING_ERROR": "ERROR",
-            "CHARACTER_INVALID": "ERROR"
+            "CHARACTER_INVALID": "ERROR",
+            "MISSING_QUOTES": "ERROR",
+            "OVERFLOW": "ERROR"
         }
         return category_type.get(token_type)
