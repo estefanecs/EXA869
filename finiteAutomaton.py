@@ -186,13 +186,10 @@ class LexicalFiniteAutomaton:
                 else:
                     self.save_token_and_restart(line_number, TokenType.ARITHMETIC_DIVIDER)
                     self.find_lexeme(character, line_number)
-            case 13: #para comentario em bloco
+            case 13:
+                self.lexeme += character
                 if character == "*":
-                    self.lexeme += character
-                    print(self.lexeme)
                     self.state = 21
-                else:
-                    self.lexeme += character
             case 14:
                 if (character == "\n"):
                     self.save_token_and_restart(line_number, TokenType.LINE_COMMENT)
@@ -248,7 +245,7 @@ class LexicalFiniteAutomaton:
                     self.lexeme += character
                 else:
                     self.lexeme += character
-                    self.state = 21
+                    self.state = 13
 
                 
 
@@ -273,5 +270,5 @@ class LexicalFiniteAutomaton:
             for character in line:
                 self.find_lexeme(character, line_number)
         if self.state == 13 or self.state == 21:
-            self.register_error_and_restart(TokenType.BLOCK_COMMENT_ERROR, line_number)
+            self.register_error_and_restart(line_number, TokenType.BLOCK_COMMENT_ERROR)
         

@@ -33,3 +33,19 @@ class Test {
 /* *a adfdsadsa*/
 /* **/
 final
+
+/***********comentario8******/
+/* teste erro comentario /*
+
+/* teste erro comentario /
+
+/* teste erro comentario *
+
+/* teste comentario com erro sem fechamento
+dkdkkddk
+dkkdkdkd
+djdjdjjd
+djdjdjdjd
+dhhdhdhd
+int a = 0
+int b = 8

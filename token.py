@@ -1,6 +1,5 @@
 from tokenCategory import TokenCategory
 
-
 class Token:
     @staticmethod
     def __get_keyword(lexeme):

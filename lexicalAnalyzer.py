@@ -1,6 +1,3 @@
-#Lista de erros: Delimitadores que abrem sem fechar: (){}[], abertura sem fechamento de comentários: /**/
-# Abertura sem fechamento de aspas simples e aspas duplas, inserção de simbolos não aceitos: ♫ » etc. (altcode),
-# Inserção de caracteres com acento: â ü etc (Consideraremos isso erro?).
 from finiteAutomaton import LexicalFiniteAutomaton
 
 def lexical_analise():
@@ -14,12 +11,6 @@ def lexical_analise():
 
 	write_file("tokens_list.txt", finiteAutomaton.show_token_list(), "Nenhum Token foi encontrado.")
 	write_file("error_token_list.txt", finiteAutomaton.show_error_list(), "Sucesso. Nenhum erro foi encontrado.")
-	for item in finiteAutomaton.show_token_list():
-		print(item)
-
-	print("----------- erro")
-	for item in finiteAutomaton.show_error_list():
-		print(item)
 
 def open_file(file_name):
 	try:

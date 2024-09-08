@@ -1,7 +1,5 @@
 class TokenCategory:
 
-    ## pensei assim para identificar cada tipo de operadores e delimitadores,
-    ## mas podemos fazer direto mesmo como sugeriu na aula. só definirmos
     @staticmethod
     def get_category(token_type):
         category_type = {    
@@ -40,6 +38,6 @@ class TokenCategory:
             "CHARACTER_INVALID": "ERROR",
             "MISSING_QUOTES": "ERROR",
             "OVERFLOW": "ERROR",
-            "BLOCK_COMMENT_ERROR": "ERRO"
+            "BLOCK_COMMENT_ERROR": "ERROR"
         }
         return category_type.get(token_type)
