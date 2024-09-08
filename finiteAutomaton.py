@@ -83,6 +83,9 @@ class LexicalFiniteAutomaton:
                 elif character == "]":
                     self.lexeme += character
                     self.save_token_and_restart(line_number, TokenType.CLOSE_SQUARE_BRACKET)
+                elif 32<ord(character)<=126:
+                    self.lexeme += character
+                    self.register_error_and_restart(line_number,TokenType.CHARACTER_INVALID)
             case 1:
                 if (re.match(r'[a-zA-Z0-9]',character)) or (re.match(r'_',character)):
                     self.lexeme += character

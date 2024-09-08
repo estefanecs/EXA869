@@ -33,6 +33,9 @@ class Test {
 /* *a adfdsadsa*/
 /* **/
 final
+@
+    $
+    
 
 /***********comentario8******/
 /* teste erro comentario /*
