@@ -33,3 +33,6 @@ class Test {
 /* *a adfdsadsa*/
 /* **/
 final
+@
+    $
+    

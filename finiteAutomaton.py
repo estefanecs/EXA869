@@ -83,6 +83,9 @@ class LexicalFiniteAutomaton:
                 elif character == "]":
                     self.lexeme += character
                     self.save_token_and_restart(line_number, TokenType.CLOSE_SQUARE_BRACKET)
+                elif 32<ord(character)<=126:
+                    self.lexeme += character
+                    self.register_error_and_restart(line_number,TokenType.CHARACTER_INVALID)
             case 1:
                 if (re.match(r'[a-zA-Z0-9]',character)) or (re.match(r'_',character)):
                     self.lexeme += character
@@ -186,7 +189,7 @@ class LexicalFiniteAutomaton:
                 else:
                     self.save_token_and_restart(line_number, TokenType.ARITHMETIC_DIVIDER)
                     self.find_lexeme(character, line_number)
-            case 13: #para comentario em bloco
+            case 13:
                 if character == "*":
                     self.lexeme += character
                     print(self.lexeme)
