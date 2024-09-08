@@ -26,7 +26,7 @@ def write_file(file_name, list, message):
 			file.write(message)
 			return
 		for item in list:
-			file.write(f"Lexeme: {item['lexeme']}, Category: {item['category']}, Line: {item['line']}\n")
+			file.write(f"Lexeme: {item['lexeme']} | Category: {item['category']} | Line: {item['line']}\n")
 
 if __name__ == "__main__":
     lexical_analise()
