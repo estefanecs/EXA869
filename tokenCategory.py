@@ -39,6 +39,7 @@ class TokenCategory:
             "STRING_ERROR": "ERROR",
             "CHARACTER_INVALID": "ERROR",
             "MISSING_QUOTES": "ERROR",
-            "OVERFLOW": "ERROR"
+            "OVERFLOW": "ERROR",
+            "BLOCK_COMMENT_ERROR": "ERRO"
         }
         return category_type.get(token_type)

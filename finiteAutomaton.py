@@ -272,4 +272,6 @@ class LexicalFiniteAutomaton:
         for line_number, line in enumerate(file, start=1):
             for character in line:
                 self.find_lexeme(character, line_number)
+        if self.state == 13 or self.state == 21:
+            self.register_error_and_restart(TokenType.BLOCK_COMMENT_ERROR, line_number)
         
