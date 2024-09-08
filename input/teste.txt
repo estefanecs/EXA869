@@ -1,6 +1,7 @@
 class Test {
 /* teste analisador léxico */
     main(string[] args) {
+        ,
         int x = 10; // Declaração de variável
         int y = x + 5; // Expressão aritmética
         4 - 3

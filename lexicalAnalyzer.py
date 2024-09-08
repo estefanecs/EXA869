@@ -9,8 +9,8 @@ def lexical_analise():
 		finiteAutomaton.recognize_tokens(file)
 		file.close()
 
-	write_file("tokens_list.txt", finiteAutomaton.show_token_list(), "Nenhum Token foi encontrado.")
-	write_file("error_token_list.txt", finiteAutomaton.show_error_list(), "Sucesso. Nenhum erro foi encontrado.")
+		write_file("tokens_list.txt", finiteAutomaton.show_token_list(), "Nenhum Token foi encontrado.")
+		write_file("error_token_list.txt", finiteAutomaton.show_error_list(), "Sucesso. Nenhum erro foi encontrado.")
 
 def open_file(file_name):
 	try:
