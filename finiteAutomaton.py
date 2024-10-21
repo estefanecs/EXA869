@@ -1,7 +1,7 @@
 import re
 
 from tokenType import TokenType
-from token import Token
+from tokens import Tokens
 
 class LexicalFiniteAutomaton:
 
@@ -170,10 +170,7 @@ class LexicalFiniteAutomaton:
                     self.save_token_and_restart(line_number, TokenType.ARITHMETIC_ADDITION)
                     self.find_lexeme(character, line_number)
             case 11:
-                if re.match(r'[0-9]', character) :
-                    self.lexeme += character
-                    self.state = 2
-                elif re.match(r'-', character):
+                if re.match(r'-', character):
                     self.lexeme += character
                     self.save_token_and_restart(line_number, TokenType.DECREMENT)
                 else:
@@ -253,12 +250,12 @@ class LexicalFiniteAutomaton:
                 
 
     def save_token_and_restart(self, line_number, token_type):
-        self.token_valid_list.append(Token.get_token(self.lexeme, token_type, line_number))
+        self.token_valid_list.append(Tokens.get_token(self.lexeme, token_type, line_number))
         self.lexeme = ''
         self.state = 0
 
     def register_error_and_restart(self, line_number, token_type):
-        self.error_list.append(Token.get_token(self.lexeme, token_type, line_number))
+        self.error_list.append(Tokens.get_token(self.lexeme, token_type, line_number))
         self.lexeme = ''
         self.state = 0
 

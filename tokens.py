@@ -1,11 +1,11 @@
 from tokenCategory import TokenCategory
 
-class Token:
+class Tokens:
     @staticmethod
     def __get_keyword(lexeme):
         keywords = {
             "variables": "VARIABLES",
-            "methods": "METHODS",
+            "function": "FUNCTION",
             "constants": "CONSTANTS",
             "class": "CLASS",
             "return": "RETURN",
@@ -24,7 +24,8 @@ class Token:
             "string": "STRING",
             "true": "TRUE",
             "false": "FALSE",
-            "extends": "EXTENDS"
+            "extends": "EXTENDS",
+            "register": "REGISTER"
         }
         return keywords.get(lexeme)
     
@@ -33,7 +34,7 @@ class Token:
         type = token_type.name
         category = TokenCategory.get_category(type)
 
-        keyword_type = Token.__get_keyword(lexeme)
+        keyword_type = Tokens.__get_keyword(lexeme)
         if type == "IDENTIFIER" and keyword_type:
            category = "KEYWORD"
            
