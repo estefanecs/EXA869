@@ -1,7 +1,8 @@
 from finiteAutomaton import LexicalFiniteAutomaton
 
-def lexical_analise():
-	#file_name = input("Digite o nome do arquivo de leitura (ex: './input/teste.txt'): ")
+def lexical_analise(file_name=None):
+	if not file_name:
+		file_name = input("Digite o nome do arquivo de leitura (ex: './input/teste.txt'): ")
 
 	file = open_file('./input/teste.txt')
  
@@ -10,9 +11,9 @@ def lexical_analise():
 		finiteAutomaton.recognize_tokens(file)
 		file.close()
 
-		write_file("tokens_list.txt", finiteAutomaton.show_token_list(), "Nenhum Token foi encontrado.")
-		write_file("error_token_list.txt", finiteAutomaton.show_error_list(), "Sucesso. Nenhum erro foi encontrado.")
-		return finiteAutomaton
+		#write_file("tokens_list.txt", finiteAutomaton.show_token_list(), "Nenhum Token foi encontrado.")
+		write_file("./saida-lexico/error_token_list.txt", finiteAutomaton.show_error_list(), "Sucesso. Nenhum erro foi encontrado.")
+		return finiteAutomaton.show_token_list()
 	return None
 
 def open_file(file_name):
